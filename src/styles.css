@@ -1,0 +1,122 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-lilac: var(--lilac);
+  --color-ink: var(--ink);
+  --color-sakura: var(--sakura);
+  --font-display: "Dela Gothic One", sans-serif;
+  --font-sans: "Chakra Petch", sans-serif;
+  --font-jp: "Zen Kaku Gothic New", sans-serif;
+}
+
+:root {
+  --radius: 0.25rem;
+  --background: oklch(0.12 0.03 295);
+  --foreground: oklch(0.95 0.02 300);
+  --card: oklch(0.17 0.04 295);
+  --card-foreground: oklch(0.95 0.02 300);
+  --popover: oklch(0.17 0.04 295);
+  --popover-foreground: oklch(0.95 0.02 300);
+  --primary: oklch(0.8 0.12 300);
+  --primary-foreground: oklch(0.15 0.05 295);
+  --secondary: oklch(0.24 0.06 295);
+  --secondary-foreground: oklch(0.95 0.02 300);
+  --muted: oklch(0.22 0.04 295);
+  --muted-foreground: oklch(0.7 0.05 300);
+  --accent: oklch(0.7 0.2 350);
+  --accent-foreground: oklch(0.12 0.03 295);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.8 0.12 300 / 18%);
+  --input: oklch(0.8 0.12 300 / 20%);
+  --ring: oklch(0.8 0.12 300);
+  --lilac: oklch(0.8 0.12 300);
+  --ink: oklch(0.36 0.12 295);
+  --sakura: oklch(0.72 0.2 350);
+  --glow: 0 0 40px oklch(0.8 0.12 300 / 45%);
+  --gradient-brand: linear-gradient(120deg, var(--lilac), var(--sakura));
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+  @media (pointer: fine) { body, a, button { cursor: none; } }
+  ::selection { background: var(--sakura); color: var(--background); }
+}
+
+@utility brand-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--lilac);
+  text-shadow: 3px 3px 0 var(--ink), 6px 6px 0 oklch(0 0 0 / 50%);
+}
+@utility outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--lilac);
+}
+@utility gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility glow { box-shadow: var(--glow); }
+@utility scanlines {
+  background-image: repeating-linear-gradient(0deg, oklch(1 0 0 / 3%) 0 1px, transparent 1px 3px);
+}
+@utility clip-slant { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%); }
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes glitch {
+  0%,100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(20% 0 60% 0); transform: translate(-4px, 2px); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translate(4px, -2px); }
+  60% { clip-path: inset(40% 0 40% 0); transform: translate(-2px, 1px); }
+  80% { clip-path: inset(10% 0 80% 0); transform: translate(3px, 0); }
+}
+@keyframes float { 50% { transform: translateY(-14px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(60px) skewY(6deg); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
+
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-float { animation: float 5s ease-in-out infinite; }
+.glitch { position: relative; }
+.glitch::before, .glitch::after {
+  content: attr(data-text); position: absolute; inset: 0; pointer-events: none;
+}
+.glitch::before { color: var(--sakura); animation: glitch 2.6s infinite steps(1); mix-blend-mode: screen; }
+.glitch::after { color: oklch(0.8 0.15 220); animation: glitch 3.1s infinite reverse steps(1); mix-blend-mode: screen; }
+.reveal { opacity: 0; }
+.reveal.in { animation: rise 1s cubic-bezier(.2,.8,.2,1) forwards; }
